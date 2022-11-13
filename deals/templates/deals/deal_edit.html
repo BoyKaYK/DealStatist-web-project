@@ -1,0 +1,21 @@
+{% extends "app/layout.html" %}
+{% block title %}Deal edit{% endblock %}
+
+{% block content %}
+
+<div class="edit deal">
+    <h1> Deals edit page </h1>
+    <form method="post">
+        {%csrf_token%}
+        <h1> Deals edit page </h1>
+        {{ deal_edit.item_name }}<br>
+        {{ edit_form.price_buy }}<br>
+        {{ edit_form.price_sell }}<br>
+        
+        <span>{{ error_editform }}</span>
+        <button class="btn btn-success" type="submit">Edit deal</button>
+        
+    </form>
+</div>
+
+{% endblock %}

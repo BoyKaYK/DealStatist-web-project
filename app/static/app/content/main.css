@@ -1,0 +1,89 @@
+body {
+    background: #B0E0E6;
+}
+
+aside {
+    float: left;
+    background: #FFDAB9;
+    width: 15%;
+    padding: 3%;
+    height: 150vh;
+    border-right: 2px solid #FF7F50;
+}
+
+    aside img {
+        width: 150px;
+        float: left;
+        
+    }
+    aside p:hover {
+        transition: all .3s ease;
+        transform: scale(1.1);
+    }
+
+    aside .logo_title {
+        font-size: 50px;
+        margin-left: 30px;
+        font-weight: bold;
+        position: relative ;
+        top: +10px;
+        
+    }
+
+aside h3 {
+    margin-top : 80px;
+    font-size : 30px;
+}
+
+aside ul li {
+        color: #FF7F50;
+        display: block;
+        transition:all .3s ease;
+ }
+
+aside ul li:hover, aside ul a:hover {
+        color: #FF7F50;
+        text-decoration: none;
+        transform: scale(1.1);
+ }
+
+main .main_btn {
+    float: left;
+    color: #FF7F50;
+    margin-top: 15px;
+    margin-left: 15px;
+    width: 10%;
+}
+
+.alert-warning {
+    float: left;
+    width: 400px;
+    margin: 20px,30%;
+    text-align: left;
+    
+}
+
+.alert-success {
+    float: left;
+    width: 400px;
+    margin: 20px,30%;
+    text-align: left;
+}
+
+
+
+form {
+    margin-left: 32%;
+    width: 500px;
+    margin-top: 50px;
+}
+
+.row {
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.row > div[class*='col-'] {
+    display: flex;
+}

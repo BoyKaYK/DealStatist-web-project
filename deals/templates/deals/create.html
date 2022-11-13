@@ -1,0 +1,20 @@
+{% extends "app/layout.html" %}
+{% block title %}Deals create{% endblock %}
+
+{% block content %}
+
+<div class="create deal">
+    <h1> Deals create page </h1>
+    <form method="post">
+        {%csrf_token%}
+        {{ form.item_name }}<br>
+        {{ form.price_buy }}<br>
+        {{ form.price_sell }}<br>
+        {{ form.date }}<br>
+        <span>{{ error_form }}</span>
+        <button class="btn btn-success" type="submit">Add new deal</button>
+        
+    </form>
+</div>
+
+{% endblock %}
