@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+{% extends "app/main_layout.html" %}
+
+{% block content %}
+<div class="main_futures">
+    <div class="main_page">
+        <h1>DealStatist</h1>
+    
+        <p>  </p>
+
+    </div>
+
+
+    <div class="row">
+        <div class="card" style="width: 25rem;">
+        <img class="card-img-top" src="https://cdn-icons-png.flaticon.com/512/4796/4796577.png" alt="Card image">
+            <div class="card-body">
+            <h5 class="card-title">New solution !</h5>
+            <p class="card-text">Use our Deals solution to improve your experience with CS:GO trade statistic</p>
+            <a href="{% url 'deals' %}" class="btn btn-primary">Go to Deals</a>
+            </div>
+        </div>
+
+        <div class="card" style="width: 25rem;">
+        <img class="card-img-top" src="https://flowxo.com/wp-content/uploads/2021/03/Telegram-Logo-512x512.png" alt="Card image">
+            <div class="card-body">
+            <h5 class="card-title">Telegram DealStatist bot is ready !</h5>
+            <p class="card-text">DealStatist telegram bot will help you to work with inventory, steam market and parsing CS:GO items for your deals.</p>
+            <a href="https://t.me/Anya_butt_bot" class="btn btn-primary">Go to DealStatist bot</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
