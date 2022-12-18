@@ -9,6 +9,7 @@ aside {
     padding: 3%;
     height: 150vh;
     border-right: 2px solid #FF7F50;
+
 }
 
     aside img {
@@ -36,13 +37,18 @@ aside {
         color: #FF7F50;
         display: block;
         transition: all .3s ease;
+
     }
 
-        aside ul li:hover, aside ul a:hover {
+    aside ul li:hover, aside ul a:hover {
             color: #FF7F50;
             text-decoration: none;
             transform: scale(1.1);
-        }
+     }
+
+    aside ul li:link, aside ul a:link {
+            text-decoration: none;
+    }
 
 .card {
     color: #FF7F50;
@@ -53,8 +59,8 @@ aside {
 }
 
 .main_page {
-    color: #FF7F50;
-    background-image: url("https://64.media.tumblr.com/84743335f479d62aa22a71ae8564632a/de5a35eddd9fad73-cc/s640x960/f4075cc27ebb8919e2a4e40f5f3bc5a6ef95d355.gif");
+    font-size: 50px;
+    color: #ccffcc;
 }
 
 .main_futures {

@@ -9,6 +9,7 @@ aside {
     padding: 3%;
     height: 150vh;
     border-right: 2px solid #FF7F50;
+    
 }
 
     aside img {
@@ -33,17 +34,23 @@ aside h3 {
     font-size : 30px;
 }
 
-aside ul li {
+    aside ul li {
         color: #FF7F50;
         display: block;
-        transition:all .3s ease;
- }
+        transition: all .3s ease;
+        
+    }
 
 aside ul li:hover, aside ul a:hover {
         color: #FF7F50;
         text-decoration: none;
         transform: scale(1.1);
  }
+
+aside ul li:link, aside ul a:link {
+        text-decoration: none;       
+}
+
 .card {
     color: #FF7F50;
     background: #ccffcc;
@@ -52,20 +59,6 @@ aside ul li:hover, aside ul a:hover {
     display: flex;
 }
 
-.main_page {
-    
-    color: #FF7F50;
-    background-image: url("https://64.media.tumblr.com/84743335f479d62aa22a71ae8564632a/de5a35eddd9fad73-cc/s640x960/f4075cc27ebb8919e2a4e40f5f3bc5a6ef95d355.gif");
-}
-.main_futures {
-    
-    background-image: url("https://64.media.tumblr.com/84743335f479d62aa22a71ae8564632a/de5a35eddd9fad73-cc/s640x960/f4075cc27ebb8919e2a4e40f5f3bc5a6ef95d355.gif");
-}
-.main_page h1 {
-    font-size: 50px;
-    margin-left: 400px;
-    
-}
 main .main_btn {
     float: left;
     color: #FF7F50;
@@ -110,5 +103,26 @@ form {
 }
 
 .row > div[class*='col-'] {
+    display: flex;
+}
+/*1600x975*/
+.my-carousel {
+    padding: 0;
+    width: 1725px;
+    margin-left: 305px;
+    float: initial;
+}
+
+
+.my-carousel .carousel-item {
+        
+}
+
+
+.text-center {
+    margin-left: 350px;
+    float: initial;
+    width: 755px;
+    height: 300px;
     display: flex;
 }
