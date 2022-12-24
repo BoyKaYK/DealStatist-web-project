@@ -1,56 +1,125 @@
 {% extends "app/layout.html" %}
 
-{% block content %}
 
-<div class="deal">
-    <h1> Deals page </h1>
+{% block content %}
+    <style>
+        .non-display {
+            display: none;        
+        }
+        .display-block {
+            display: block;
+        }
+        .margin-top {
+            margin-top: 20px;
+        }
+    </style>
+  
+  <div class="deal">
+    <h2>Deals page </h2>
 
     {%for el in profit%}
+
     <div class="profit">
-        <h3>Profit</h3>
-        <h3>{{el.profit}}</h3>
+        <h3>Profit :</h3>
+        
+        <div class="alert alert-success" role="alert">
+            <h3>{{el.profit}}</h3>
+        </div>
+        <h3>Profit on market :</h3>
+        
+        <div class="alert alert-warning" role="alert">
+            <h3>{{el.profit_on_sale}}</h3>
+        </div>
         <a href="{% url 'profit' %}" class="btn btn-warning">Update profit </a>
+        <div class="search_bar">
+            <form class="form-inline my-2 my-lg-0" action="{% url 'deals' %}">
+                <input id="search_here" class="form-control mr-sm-2" type="search" placeholder="type here to search.." name="search">
+
+                <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+        </div>
     </div>
+    
     {% endfor %}
-    
+  </div> 
+
+
+<body>
     {%if deals%}
-    <div class="row">
-        {%for el in deals%}
-        {%if el.deal_status%}
+    <div id="spinner-load">
+        <div class="d-flex justify-content-center">
+            <div class="spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    </div>
+    <div id="deals">
+        <div class="row">
+        
+            {%for el in deals%}
+            {%if el.deal_status%}
     
-        <div class="col-sm-2">
-            <div class="card text-white bg-success mb-3" style="width: 10rem;">
-                <img class="card-img-top" src="{{el.img}}" alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title">{{el.item_name}}</h5>
-                    <p class="card-text">Buy price: {{el.price_buy}}</p>
-                    <p class="card-text">Sell price: {{el.price_sell}}</p>
+            <div class="col-sm-2">
+                <div class="card text-white bg-success mb-3" style="width: 10rem;">
+                    <img class="card-img-top" src="{{el.img}}" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">{{el.item_name}}</h5>
+                        <p class="card-text">Buy price: {{el.price_buy}}</p>
+                        <p class="card-text">Sell price: {{el.price_sell}}</p>
+                    </div>
                 </div>
             </div>
-        </div>
-    
-        {%else%}
-   
-        <div class="card text-white bg-warning mb-3" style="width: 10rem;">
-            <img class="card-img-top" src="{{el.img}}" alt="Card image cap">
-            <div class="card-body">
-                <h5 class="card-title">{{el.item_name}}</h5>
-                <p class="card-text">Buy price: {{el.price_buy}}</p>
-                <p class="card-text">Sell price: {{el.price_sell}}</p>
-                <a href="{% url 'deals-edit' el.id %}" class="btn btn-secondary">Edit</a>
-                <a href="{% url 'deals-sold' el.id %}" class="btn btn-success">Sold!</a>
+        
+            {%else%}
+            <div class="col-sm-2">
+                <div class="card text-white bg-warning mb-3" style="width: 10rem;">
+                     <img class="card-img-top" src="{{el.img}}" alt="Card image cap">
+                     <div class="card-body">
+                         <h5 class="card-title">{{el.item_name}}</h5>
+                         <p class="card-text">Buy price: {{el.price_buy}}</p>
+                         <p class="card-text">Sell price: {{el.price_sell}}</p>
+                         <a href="{% url 'deals-edit' el.id %}" class="btn btn-secondary">Edit</a>
+                         <a href="{% url 'deals-sold' el.id %}" class="btn btn-success">Sold!</a>
 
+                     </div>
+                </div>
             </div>
-        </div>
 
-
-        {%endif%}
+            {%endif%}
     
-        {% endfor %}
+            {% endfor %}
+        
+        </div>
+        {%else%}
+        <p> You have no deals !</p>
+        {%endif%}
     </div>
-    {%else%}
-    <p> You have no deals !</p>
-    {%endif%}
-</div>
+</body>
+{% endblock %}
 
+
+{% block scripts %}
+     <script>
+         const spinner = document.getElementById("spinner-load")
+         const deals = document.getElementById("deals")
+
+         spinner.classList.add('margin-top')
+         $.ajax({
+             type: 'GET',
+             url: '/',
+             success: function (res) {
+                 deals.classList.add('non-display')
+                 setTimeout(() => {
+                     spinner.classList.add('non-display')
+                     deals.classList.add('display-block')
+                 },350)
+             },
+
+             error: function(er){
+               console.log("error")
+             },
+
+         })
+         
+    </script>
 {% endblock %}
