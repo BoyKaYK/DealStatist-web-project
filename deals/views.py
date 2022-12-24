@@ -10,13 +10,17 @@ from django.contrib.auth.decorators import login_required
 
 @login_required(login_url='login')
 def deals(request):
-    print(request.user)
-    deals = Deal.objects.filter(author=request.user)
-    all_deals = Deal.objects.all()
-    for deal in deals:
-        print(deal.author)
-    print(deals)
-    profit = Profit.objects.all()
+    #print(request.user)
+    search_bar =request.GET.get('search','')
+
+    if search_bar:
+        deals = Deal.objects.filter(author=request.user,item_name__icontains=search_bar).order_by('-date')
+    else:
+        deals = Deal.objects.filter(author=request.user).order_by('-date')
+        all_deals = Deal.objects.all()
+   
+    profit = Profit.objects.filter(author=request.user)
+    
     assert isinstance(request, HttpRequest)
     return render(
         request,
@@ -74,20 +78,29 @@ def sold(request,id):
 
 @login_required(login_url='login')
 def profit_calc(request):
-    data = Deal.objects.all()
+    data = Deal.objects.filter(author=request.user)
     #profit = Deal.objects.aggregate(Sum('price_buy')) 
     #buy = profit.get('price_buy__sum')
     #print(buy)
-    profit_data = Profit.objects.all()
+    profit_data = Profit.objects.filter(author=request.user)
     total_buy = 0
     total_sell = 0
+    total_on_sale = 0
+    total_but_not_sold = 0
     for deal in data:
         if(deal.deal_status):
             total_buy += deal.price_buy
             total_sell += deal.price_sell
 
+        elif(not deal.deal_status):
+            total_but_not_sold += deal.price_buy
+            total_on_sale += deal.price_sell
+            
+
+    profit_on_sale = total_on_sale - total_but_not_sold
     profit_gross = total_sell - total_buy
-    Profit.objects.all().update(profit = profit_gross)  
+    
+    Profit.objects.filter(author=request.user).update(profit = round(profit_gross, 2), profit_on_sale = round(profit_on_sale, 2))  
     
     return redirect('deals')
 
@@ -96,39 +109,48 @@ def profit_calc(request):
 def create(request):
     error_form = ''
     img = ImageParser()
-    data = Deal.objects.all()
-    print(len(data))
+    #print(len(data))
     #deal_author = request.user
     if request.method =='POST':
         form = DealsForm(request.POST)
+        
         if form.is_valid():
             form.save()
-            
+            last = Deal.objects.latest('id')
+            last.author = request.user
+            last.save(update_fields=["author"])
+            #print(last)
+            #print(last.author)
+            data = Deal.objects.all()
             for item in data:
-                
-               if(item.img == "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/2048px-No_image_available.svg.png"):
-                    try: 
-                        item.img = img.get_image(str(item.item_name))
-                        #print(item.img)
-                        item.save(update_fields=["img"])
-                    except:
-                        print(f"broken name :{item.item_name}")
+                try:
+                    for name in data:
+                       if(item.item_name == name.item_name and name.img != "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/2048px-No_image_available.svg.png"):
+                          item.img = name.img
+                          item.save(update_fields=["img"])
+                          #print("saved")
+                          continue
+                                
+                    if(item.img == "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/2048px-No_image_available.svg.png"):        
+                       item.img = img.get_image(str(item.item_name))
+                       #print(item.img)
+                       #print("request img")
+                       item.save(update_fields=["img"])
+
+                except:
+                       print(f"broken name :{item.item_name}")
                
-               
-                
-            
             return redirect('deals')
         else:
             error_form ="Input is not valid ! "
+
     form = DealsForm()
 
-    last = Deal.objects.last()
-    last.author = request.user
-    last.save(update_fields=["author"])
-
+    all_names = Deal.objects.all()
     data={
         'form': form,
-        'error_form': error_form
+        'error_form': error_form,
+        'all_names': all_names
         }
 
     return render(request, 'deals/create.html', data)
