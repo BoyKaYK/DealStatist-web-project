@@ -7,6 +7,8 @@ from django.views.generic import DetailView
 from django.db.models import Sum
 from Web_app.image_parser import *
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
+
 
 @login_required(login_url='login')
 def deals(request):
@@ -19,13 +21,18 @@ def deals(request):
         deals = Deal.objects.filter(author=request.user).order_by('-date')
         all_deals = Deal.objects.all()
    
+    pages = Paginator(deals, 12)
+    print(pages.page_range)
+    page_number = request.GET.get('page')
+    page_obj = pages.get_page(page_number)
+
     profit = Profit.objects.filter(author=request.user)
     
     assert isinstance(request, HttpRequest)
     return render(
         request,
         'deals/deals.html',
-        {'deals':deals,
+        {'deals':page_obj,
          'profit':profit}
 
     )
