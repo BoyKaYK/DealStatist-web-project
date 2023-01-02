@@ -15,7 +15,9 @@
     </style>
   
   <div class="deal">
-    <h2>Deals page </h2>
+    <div class="head-img">
+        <img src="../../static/app/img/deals.png" />
+    </div>
 
     {%for el in profit%}
 
@@ -48,7 +50,7 @@
     {%if deals%}
     <div id="spinner-load">
         <div class="d-flex justify-content-center">
-            <div class="spinner-border" role="status">
+            <div class="spinner-border text-primary" role="status">
                 <span class="visually-hidden">Loading...</span>
             </div>
         </div>
@@ -60,7 +62,7 @@
             {%if el.deal_status%}
     
             <div class="col-sm-2">
-                <div class="card text-white bg-success mb-3" style="width: 10rem;">
+                <div class="card text-white bg-success mb-3" style="width: 13rem;">
                     <img class="card-img-top" src="{{el.img}}" alt="Card image cap">
                     <div class="card-body">
                         <h5 class="card-title">{{el.item_name}}</h5>
@@ -72,7 +74,7 @@
         
             {%else%}
             <div class="col-sm-2">
-                <div class="card text-white bg-warning mb-3" style="width: 10rem;">
+                <div class="card text-white bg-warning mb-3" style="width: 13rem;">
                      <img class="card-img-top" src="{{el.img}}" alt="Card image cap">
                      <div class="card-body">
                          <h5 class="card-title">{{el.item_name}}</h5>
@@ -93,7 +95,8 @@
         {%else%}
         <p> No deals found !</p>
         {%endif%}
-
+   
+  {%if deals%}
   <nav aria-label="Page navigation">
       <ul class="pagination justify-content-center pagination-lg">
         <li class="page-item">
@@ -117,6 +120,7 @@
         {% for p in deals.paginator.page_range %}
         
             {% ifequal p deals.number %}
+                       <!-- not disabled -->
                 <li class="page-item active" aria-current="page">
                     <a class="page-link" href="?page={{p}}">{{p}}</a>
                 </li>
@@ -145,6 +149,8 @@
         {% endif %}
       </ul>
    </nav>
+   {%endif%}
+
  </div>
 
 </body>
