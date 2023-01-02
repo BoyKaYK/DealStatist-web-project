@@ -16,6 +16,7 @@ Web portal for calculating the statistics of your deals, transactions, exchanges
 ![contact](https://user-images.githubusercontent.com/88595925/210226720-d25c7fb5-ff24-476d-89b7-6cc2ad7d8574.png)
 
   *Open/Close sidebar :
+  
 ![sidebar_close](https://user-images.githubusercontent.com/88595925/210226783-a48ad0ac-1575-4736-84f3-1c307a546599.png)
 ![sidebar_open](https://user-images.githubusercontent.com/88595925/210226785-22dee1f0-d087-4725-b353-c802f7e856b2.png)
 
