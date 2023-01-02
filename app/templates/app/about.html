@@ -1,10 +1,51 @@
 {% extends "app/layout.html" %}
+{% load static %}
 
 {% block content %}
 
-<h2>{{ title }}.</h2>
-<h3>{{ message }}</h3>
+<div class="container-fluid my-carousel">
+    <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="false">
+  <div class="carousel-indicators">
+    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+  </div>
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img src={% static 'app/img/skins.gif' %} class="d-block w-100" alt="...">
+      <div class="carousel-caption d-none d-md-block">
+        <h5>The Deals tool <span class="badge bg-secondary">New</span> </h5>
+        <p>Use our tool to keep statistics on the benefits of your transactions on the Steam market.</p>
+      </div>
+    </div>
+    <div class="carousel-item">
+      <img src={% static 'app/img/skins2.png' %} class="d-block w-100" alt="...">
+      <div class="carousel-caption d-none d-md-block">
+        <h5>Add your Deals</h5>
+        <p>You can add your deal using the button from the menu on the left, and then fill out the form with the data of your item.
+           It's easy!</p>
+      </div>
+    </div>
+    <div class="carousel-item">
+      <img src="{% static 'app/img/tg_bot.png' %}" class="d-block w-100" alt="...">
+      <div class="carousel-caption d-none d-md-block">
+        <h5>DealStatist Telegram bot</h5>
+        <p>Use our bot for easy prasing of items on the Steam marketplace, your Steam inventory items and a list of lots for sale.</p>
+      </div>
+    </div>
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
 
-<p>How to use : ....</p>
+</div>
 
 {% endblock %}
+
+
