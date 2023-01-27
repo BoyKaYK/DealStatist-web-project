@@ -51,7 +51,17 @@ body.dark .home .main_btn {
     display: flex;
     width: 150px;
 }
+/* Deal Delete btn*/
+.btn-close {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+}
 
+/*Toast Confirmation text*/
+.toast-text {
+    color:black;
+}
 /* PROFIT HEAD */
 .home .profit {
     margin-left: 20%;
@@ -87,6 +97,15 @@ form {
     flex-wrap: wrap;
 }
 
+.list-group li {
+    background-color: #198754;
+    color: white;
+}
+
+.onsale-deal .list-group li {
+    background-color: #FFC107;
+    color: white;
+}
 .row > div[class*='col-'] {
     display: flex;
 }
