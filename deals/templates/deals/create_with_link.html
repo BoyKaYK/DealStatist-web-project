@@ -20,17 +20,8 @@
     
     <form method="post">
         {%csrf_token%}
-        <select id="selectname">
-            <option > Skins in database </option>
-            {%for result in all_names%}
-            <option> {{result.item_name}} </option>
-            {% endfor %}
-        </select>
         
-        {{ form.item_name }}<br>
-        {{ form.price_buy }}<br>
-        {{ form.price_sell }}<br>
-        {{ form.item_fv }}<br>
+        {{ form.view_link }}<br>
         {{ form.date }}<br>
 
         <span>{{ error_form }}</span>

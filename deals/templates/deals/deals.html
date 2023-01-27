@@ -46,7 +46,7 @@
   </div> 
 
 
-<body>
+    
     {%if deals%}
     <div id="spinner-load">
         <div class="d-flex justify-content-center">
@@ -55,6 +55,7 @@
             </div>
         </div>
     </div>
+    
     <div id="deals">
         <div class="row">
         
@@ -62,27 +63,88 @@
             {%if el.deal_status%}
     
             <div class="col-sm-2">
-                <div class="card text-white bg-success mb-3" style="width: 13rem;">
+                <div class="card text-white bg-success mb-3" style="width: 16rem;">
+                    <button type="button" class="btn-close" id="{{el.id}}" aria-label="Delete"></button>
+                    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+                        <div id="{{el.id}}" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
+                        <div class="toast-header">
+                            <strong class="me-auto">{{el.item_name}}</strong>
+                
+                        </div>
+                        <div class="toast-body">
+                             <div class="toast-text">
+                            Are you sure to delete this Deal ?
+                             </div>
+                            <div class="mt-2 pt-2 border-top">
+                                <a href="{% url 'deal_delete' el.id %}" type="button" class="btn btn-primary btn-sm">Delete</a>
+                                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="toast">Close</button>
+                            </div> 
+                        </div>
+
+                        </div>
+                    </div>
                     <img class="card-img-top" src="{{el.img}}" alt="Card image cap">
                     <div class="card-body">
                         <h5 class="card-title">{{el.item_name}}</h5>
-                        <p class="card-text">Buy price: {{el.price_buy}}</p>
-                        <p class="card-text">Sell price: {{el.price_sell}}</p>
+                    
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-triangle" viewBox="0 0 16 16">
+                    <path d="M7.938 2.016A.13.13 0 0 1 8.002 2a.13.13 0 0 1 .063.016.146.146 0 0 1 .054.057l6.857 11.667c.036.06.035.124.002.183a.163.163 0 0 1-.054.06.116.116 0 0 1-.066.017H1.146a.115.115 0 0 1-.066-.017.163.163 0 0 1-.054-.06.176.176 0 0 1 .002-.183L7.884 2.073a.147.147 0 0 1 .054-.057zm1.044-.45a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566z"/>
+                    </svg> : {{el.profit}} </li>
+                        <li class="list-group-item">Buy price: {{el.price_buy}}</li>
+                        <li class="list-group-item">Sell price: {{el.price_sell}}</li>
+                        {% if el.item_fv %}
+                        <li class="list-group-item">Item fv: {{el.item_fv}}</li>
+                        {% endif %}
+                    </ul>
+                    </div>
+                    <div class="card-footer">
+                        <small class="card-text">Created: {{ el.date }}</small>
                     </div>
                 </div>
             </div>
         
             {%else%}
             <div class="col-sm-2">
-                <div class="card text-white bg-warning mb-3" style="width: 13rem;">
+                <div class="card text-white bg-warning mb-3" style="width: 16rem;">
+                    <button type="button" class="btn-close" id="{{el.id}}" aria-label="Delete"></button>
+                    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+                        <div id="{{el.id}}" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
+                        <div class="toast-header">
+                            <strong class="me-auto">{{el.item_name}}</strong>
+                
+                        </div>
+                        <div class="toast-body">
+                             <div class="toast-text">
+                            Are you sure to delete this Deal ?
+                             </div>
+                            <div class="mt-2 pt-2 border-top">
+                                <a href="{% url 'deal_delete' el.id %}" type="button" class="btn btn-primary btn-sm">Delete</a>
+                                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="toast">Close</button>
+                            </div> 
+                        </div>
+
+                        </div>
+                    </div>
                      <img class="card-img-top" src="{{el.img}}" alt="Card image cap">
                      <div class="card-body">
                          <h5 class="card-title">{{el.item_name}}</h5>
-                         <p class="card-text">Buy price: {{el.price_buy}}</p>
-                         <p class="card-text">Sell price: {{el.price_sell}}</p>
+                         <div class="onsale-deal">
+                         <ul class="list-group list-group-flush">
+                        
+                            <li class="list-group-item">Buy price: {{el.price_buy}}</li>
+                            <li class="list-group-item">Sell price: {{el.price_sell}}</li>
+                        {% if el.item_fv %}
+                            <li class="list-group-item">Item fv: {{el.item_fv}}</li>
+                        {% endif %}
+                        </ul>
+                        </div> 
+                         {% if el.link_status %}
+                         <a href="{% url 'check_sale' el.id %}" class="btn btn-primary">Check sale</a>
+                         {% else %}
                          <a href="{% url 'deals-edit' el.id %}" class="btn btn-secondary">Edit</a>
                          <a href="{% url 'deals-sold' el.id %}" class="btn btn-success">Sold!</a>
-
+                         {% endif %}
                      </div>
                 </div>
             </div>
@@ -153,7 +215,8 @@
 
  </div>
 
-</body>
+    
+
 {% endblock %}
 
 
@@ -179,6 +242,33 @@
              },
 
          })
+
+        
          
+    </script>
+     <script>
+           
+        let toastTrigger = document.querySelectorAll('.btn-close')
+        let toastLiveExample = document.querySelectorAll('.toast')
+        
+         toastTrigger.forEach(function(elem) {
+             elem.addEventListener("click", function () {
+                 for (var i = 0; i < toastTrigger.length; i++) {
+                     
+                     if (toastTrigger[i].id == this.id) {
+                         const toast = new bootstrap.Toast(toastLiveExample[i])
+                         toast.show()
+                     }
+                      
+                 }
+                    
+             });
+         });
+                
+                
+                
+                    
+    
+            
     </script>
 {% endblock %}
