@@ -11,12 +11,37 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from .forms import RegistrationForm
 from django.contrib.auth.decorators import login_required
-
+from deals.models import Profit
 
 def home(request):
     """Renders the home page."""
     assert isinstance(request, HttpRequest)
-    return render(
+    if request.user.is_authenticated:
+        new_profit = Profit()
+        if(Profit.objects.filter(author=request.user)):
+            return render(
+        request,
+        'app/login_main.html',
+        {
+            'title':'Home Page',
+            'year':datetime.now().year,
+        }
+    )
+        else:
+            new_profit = Profit(author=request.user)
+            new_profit.save()
+            return render(
+        request,
+        'app/login_main.html',
+        {
+            'title':'Home Page',
+            'year':datetime.now().year,
+        }
+    )
+
+
+    else :
+        return render(
         request,
         'app/index.html',
         {
@@ -57,6 +82,7 @@ def registeruser(request):
         form_register = RegistrationForm(request.POST)
         if form_register.is_valid():
             form_register.save()
+            
             return redirect('login')
 
     context = {'form':form_register}
