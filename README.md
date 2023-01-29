@@ -15,6 +15,9 @@ Feel free to contact me with problems, requests and bugs using the contact page.
   *Deals page with search_bar :
 ![dealsdark](https://user-images.githubusercontent.com/88595925/210226699-79fb7f68-8ae1-48c9-acaa-070ebd748a2a.png)
 
+  *New deals -> add_method deal/link_method deal/sold deal :
+![new deals](https://user-images.githubusercontent.com/88595925/215352424-8f5fc7d3-7db5-484a-ada3-b96f27bbe824.png)
+
   *Contact page :
 ![contact](https://user-images.githubusercontent.com/88595925/210226720-d25c7fb5-ff24-476d-89b7-6cc2ad7d8574.png)
 
