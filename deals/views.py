@@ -197,9 +197,10 @@ def create_with_link(request):
             last.item_name = api.get_item_name()
             last.price_buy = api.get_price()
             last.item_fv = api.get_floatvalue()[:10]
+            last.float_id = api.get_float_id()
             last.link_status = True
 
-            last.save(update_fields=["author","item_name","price_buy","item_fv","link_status"])
+            last.save(update_fields=["author","item_name","price_buy","item_fv","link_status","float_id"])
             data = Deal.objects.all()
             for item in data:
                 try:
@@ -240,7 +241,7 @@ def check_sale(request,id):
     link_deal = Deal.objects.get(pk=id)
     last_price = link_deal.price_buy
     api = CsgoFloat_api_request(link_deal.view_link)
-    new_price = api.get_price()
+    new_price = api.get_price(float_id = link_deal.float_id)
     #!!!!add price validator
     if(last_price == new_price ):
         return redirect('deals')
@@ -248,6 +249,7 @@ def check_sale(request,id):
         link_deal.deal_status = True
         link_deal.price_sell = new_price
         link_deal.profit = link_deal.price_sell - link_deal.price_buy
+        link_deal.profit = float("{0:.2f}".format(link_deal.profit))
         link_deal.save(update_fields=['deal_status','price_sell','profit'])
 
     return redirect('deals')

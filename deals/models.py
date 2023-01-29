@@ -13,6 +13,7 @@ class Deal(models.Model):
     profit = models.FloatField('Profit',default='0')
     img = models.TextField('item_src',default='https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/2048px-No_image_available.svg.png')
     author = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+    float_id = models.CharField(max_length=32, blank=True, null=True)
     view_link = models.TextField('view_link',default='')
     link_status = models.BooleanField('Link status',max_length=1,default='0')
     
