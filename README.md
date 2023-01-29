@@ -6,7 +6,8 @@ Feel free to contact me with problems, requests and bugs using the contact page.
 
 # Preview NEW-VERSION
   *Main page after login :
-![main](https://user-images.githubusercontent.com/88595925/210226633-f6265268-644d-4c13-af43-14a00091e97c.png)
+![main205048](https://user-images.githubusercontent.com/88595925/215352193-51cf9dcb-bb3c-4123-a8a9-32dd2131ad8d.png)
+
 
   *About page :
 ![about](https://user-images.githubusercontent.com/88595925/210226667-08997e87-c83d-407f-ac99-b16cbb41f601.png)
