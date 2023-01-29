@@ -26,7 +26,7 @@ class CsgoFloat_api_request():
 
     def get_float_id(self):
         self.get_parser()
-        #print(parser)
+        
         for i in range(len(self.parser)): 
            if '"floatid":' in self.parser[i]:
                 float_pos = i
@@ -36,8 +36,13 @@ class CsgoFloat_api_request():
         
         return self.float_id
 
-    def get_item_history(self):
-        self.get_float_id()
+    def get_item_history(self,saved_id = None):
+        if(saved_id):
+            self.float_id = saved_id
+            #print(f"saved f_id {self.float_id}")
+        else:
+            self.get_float_id()
+
         url = f"https://csgofloat.com/api/v1/floatdb/item/{self.float_id}/history"
         headers = {'Authorization': '3AV08BVJIpt17v8894-Rt0GhV2oS3C0y'}
         self.item_history = requests.get(url, headers=headers).text
@@ -45,23 +50,28 @@ class CsgoFloat_api_request():
 
         return self.item_history
 
-    def get_price(self):
-        self.get_item_history()
-        parser = self.item_history.split(",")
+    def get_price(self, float_id = None):
+        
+        if(float_id):
+            self.get_item_history(saved_id = float_id )
+        else:
+            self.get_item_history()
 
+        parser = self.item_history.split(",")
+        #print(parser)
         for i in range(len(parser)): 
-           if 'price' in parser[i]:
-                price_pos = i
+             if 'price' in parser[i]:
+                 price_pos = i
         
         if "price_pos" in locals():   
-            try:
-                self.buy_price = parser[price_pos].split(":")[1]
-                self.buy_price = float(self.buy_price) / 100
-            except:
-                self.buy_price = parser[price_pos].split(":")[2]
-                self.buy_price = float(self.buy_price) / 100
+             try:
+                    self.buy_price = parser[price_pos].split(":")[1]
+                    self.buy_price = float(self.buy_price) / 100
+             except:
+                    self.buy_price = parser[price_pos].split(":")[2]
+                    self.buy_price = float(self.buy_price) / 100
         else:
-             print("Price error !")
+                print("Price error !")
 
         print(self.buy_price)
        
