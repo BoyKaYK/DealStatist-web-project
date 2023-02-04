@@ -138,9 +138,12 @@
                             <li class="list-group-item">Item fv: {{el.item_fv}}</li>
                         {% endif %}
                         </ul>
-                        </div> 
+                        </div>
                          {% if el.link_status %}
                          <a href="{% url 'check_sale' el.id %}" class="btn btn-primary">Check sale</a>
+                         {% elif el.not_valid_status %}
+                         <h6>We have not received a response from API.Try again in a few hours by pressing the button.</h6>
+                         <a href="{% url 'fix_linked_deal' el.id %}" class="btn btn-secondary">Fix deal</a>
                          {% else %}
                          <a href="{% url 'deals-edit' el.id %}" class="btn btn-secondary">Edit</a>
                          <a href="{% url 'deals-sold' el.id %}" class="btn btn-success">Sold!</a>
@@ -181,14 +184,14 @@
         
         {% for p in deals.paginator.page_range %}
         
-            {% ifequal p deals.number %}
+            {% if p == deals.number %}
                        <!-- not disabled -->
                 <li class="page-item active" aria-current="page">
                     <a class="page-link" href="?page={{p}}">{{p}}</a>
                 </li>
             {% else %}
                 <li class="page-item"><a class="page-link" href="?page={{p}}">{{p}}</a></li>
-            {% endifequal %}
+            {% endif %}
         
         {% endfor %}
 
