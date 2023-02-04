@@ -8,6 +8,7 @@ from django.views.generic import DetailView
 from django.db.models import Sum
 from Web_app.image_parser import *
 from Web_app.csgo_float_api_request import *
+from Web_app.link_validator import *
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 
@@ -18,7 +19,7 @@ def deals(request):
     search_bar =request.GET.get('search','')
 
     if search_bar:
-        deals = Deal.objects.filter(author=request.user,item_name__icontains=search_bar).order_by('-date')
+        deals = Deal.objects.filter(author=request.user,item_name__icontains=search_bar).order_by('-pk')
         sizeofdeals = len(deals)
         if(sizeofdeals > 0):
             pages = Paginator(deals, sizeofdeals)
@@ -26,7 +27,7 @@ def deals(request):
         
 
     else:
-        deals = Deal.objects.filter(author=request.user).order_by('-date')
+        deals = Deal.objects.filter(author=request.user).order_by('-pk')
         pages = Paginator(deals, 12)
     
     #print(pages.page_range)
@@ -189,38 +190,55 @@ def create_with_link(request):
         form = LinkCreateDealForm(request.POST)
         
         if form.is_valid():
-            form.save()
-            last = Deal.objects.latest('id')
-            api = CsgoFloat_api_request(last.view_link)
+            url = form.cleaned_data.get('view_link')
+            if link_validation(str(url)) and len(str(url)) > 0 :
+                form.save()
+                last = Deal.objects.latest('id')
+                api = CsgoFloat_api_request(last.view_link)
 
-            last.author = request.user
-            last.item_name = api.get_item_name()
-            last.price_buy = api.get_price()
-            last.item_fv = api.get_floatvalue()[:10]
-            last.float_id = api.get_float_id()
-            last.link_status = True
+                last.author = request.user
+                last.item_name = api.get_item_name()
+                last.item_fv = api.get_floatvalue()[:10]
+                last.price_buy = api.get_price()
+                last.float_id = api.get_float_id()
+                last.link_status = True
 
-            last.save(update_fields=["author","item_name","price_buy","item_fv","link_status","float_id"])
-            data = Deal.objects.all()
-            for item in data:
-                try:
-                    for name in data:
-                       if(item.item_name == name.item_name and name.img != "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/2048px-No_image_available.svg.png"):
-                          item.img = name.img
-                          item.save(update_fields=["img"])
-                          #print("saved")
-                          continue
+                if(last.price_buy == None or last.float_id == None):
+                    last.not_valid_status = True
+                    last.link_status = False
+                else:
+                    last.not_valid_status = False
+                    last.link_status = True
+                last.save(update_fields=["author","item_name","price_buy","item_fv","link_status","float_id","not_valid_status"])
+                data = Deal.objects.all()
+                for item in data:
+                    try:
+                        for name in data:
+                            if(item.item_name == name.item_name and name.img != "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/2048px-No_image_available.svg.png"):
+                                item.img = name.img
+                                item.save(update_fields=["img"])
+                                #print("saved")
+                                continue
                                 
-                    if(item.img == "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/2048px-No_image_available.svg.png"):        
-                       item.img = img.get_image(str(item.item_name))
-                       #print(item.img)
-                       #print("request img")
-                       item.save(update_fields=["img"])
+                            if(item.img == "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/2048px-No_image_available.svg.png"):        
+                                item.img = img.get_image(str(item.item_name))
+                                #print(item.img)
+                                #print("request img")
+                                item.save(update_fields=["img"])
 
-                except:
+                    except:
                        print(f"broken name :{item.item_name}")
                
-            return redirect('deals')
+                return redirect('deals')
+            else:
+                error_form ="Input is not valid ! "
+                form = LinkCreateDealForm()
+                data={
+                        'form': form,
+                        'error_form': error_form, 
+                      }
+                return render(request, 'deals/create_with_link.html', data)
+    
         else:
             error_form ="Input is not valid ! "
 
@@ -247,13 +265,30 @@ def check_sale(request,id):
         return redirect('deals')
     else:
         link_deal.deal_status = True
-        link_deal.price_sell = new_price
+        link_deal.price_sell = new_price * 0.87 #steam taxes
+        link_deal.price_sell = float("{0:.2f}".format(link_deal.price_sell))
         link_deal.profit = link_deal.price_sell - link_deal.price_buy
         link_deal.profit = float("{0:.2f}".format(link_deal.profit))
         link_deal.save(update_fields=['deal_status','price_sell','profit'])
 
     return redirect('deals')
 
+@login_required(login_url='login')
+def fix_linked_deal(request,id):
+    deal = Deal.objects.get(pk=id)
+    api = CsgoFloat_api_request(deal.view_link)
+    deal.price_buy = api.get_price()
+    deal.float_id = api.get_float_id()
+
+    if( deal.price_buy == None or  deal.float_id == None):
+         deal.not_valid_status = True
+         deal.link_status = False
+    else:
+         deal.not_valid_status = False
+         deal.link_status = True
+
+    deal.save(update_fields=["price_buy","float_id","not_valid_status","link_status"])
+    return redirect('deals')
 
 @login_required(login_url='login')
 def deal_delete(request,id):
