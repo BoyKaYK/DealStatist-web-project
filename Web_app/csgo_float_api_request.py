@@ -16,9 +16,8 @@ class CsgoFloat_api_request():
         
     def get_parser(self):
         reqest_url = f'https://api.csgofloat.com/?url={self.inspect_link}' 
-        parse_session = requests.Session()
-        proxies = { 'http' : 'http://tgmkycle:rg36ssxcn25g@188.74.210.207:6286' } 
-        get_page = parse_session.get(reqest_url, proxies=proxies)
+        parse_session = requests.Session() 
+        get_page = parse_session.get(reqest_url)
         get_page.text
         parser = BeautifulSoup(get_page.text,'html.parser')
         parser = str(parser)
@@ -26,14 +25,17 @@ class CsgoFloat_api_request():
 
     def get_float_id(self):
         self.get_parser()
-        
-        for i in range(len(self.parser)): 
-           if '"floatid":' in self.parser[i]:
-                float_pos = i
+        try:
+            for i in range(len(self.parser)): 
+                if '"floatid":' in self.parser[i]:
+                    float_id_pos = i
 
-        self.float_id = self.parser[float_pos].split(":")[1].replace('"','')
-        #print(self.float_id) 
-        
+            self.float_id = self.parser[float_id_pos].split(":")[1].replace('"','')
+            #print(self.float_id) 
+        except:
+            print("No floatid found !")
+            return self.float_id
+
         return self.float_id
 
     def get_item_history(self,saved_id = None):
@@ -42,11 +44,15 @@ class CsgoFloat_api_request():
             #print(f"saved f_id {self.float_id}")
         else:
             self.get_float_id()
+        try:
+            url = f"https://csgofloat.com/api/v1/floatdb/item/{self.float_id}/history"
+            headers = {'Authorization': '3AV08BVJIpt17v8894-Rt0GhV2oS3C0y'}
+            self.item_history = requests.get(url, headers=headers).text
+            #print(self.item_history)
+        except:
+            print("No item history found !")
+            return self.item_history
 
-        url = f"https://csgofloat.com/api/v1/floatdb/item/{self.float_id}/history"
-        headers = {'Authorization': '3AV08BVJIpt17v8894-Rt0GhV2oS3C0y'}
-        self.item_history = requests.get(url, headers=headers).text
-        #print(self.item_history)
 
         return self.item_history
 
@@ -56,24 +62,28 @@ class CsgoFloat_api_request():
             self.get_item_history(saved_id = float_id )
         else:
             self.get_item_history()
-
-        parser = self.item_history.split(",")
-        #print(parser)
-        for i in range(len(parser)): 
+        try:
+            parser = self.item_history.split(",")
+            #print(parser)
+            for i in range(len(parser)): 
              if 'price' in parser[i]:
                  price_pos = i
         
-        if "price_pos" in locals():   
+            if "price_pos" in locals():   
              try:
                     self.buy_price = parser[price_pos].split(":")[1]
                     self.buy_price = float(self.buy_price) / 100
              except:
                     self.buy_price = parser[price_pos].split(":")[2]
                     self.buy_price = float(self.buy_price) / 100
-        else:
+            else:
                 print("Price error !")
 
-        print(self.buy_price)
+            print(self.buy_price)
+        except:
+            print("No price found !")
+            return self.buy_price
+
        
         return self.buy_price
 
