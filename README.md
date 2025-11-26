@@ -1,7 +1,7 @@
 # DealStatist-web-project
 Web portal for calculating the statistics of your deals, transactions, exchanges on the Steam Market and other  platforms.
 
-# Try it on https://boykaexe.pythonanywhere.com/
+
 Feel free to contact me with problems, requests and bugs using the contact page.
 
 # Preview NEW-VERSION
